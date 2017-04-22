@@ -1,6 +1,7 @@
 package app;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 
 /**
  * Class for utilities and useful methods.
@@ -19,17 +20,6 @@ class Utilities {
         String ip = "0.0.0.0";
         try {
             ip = InetAddress.getLocalHost().getHostAddress();
-//            System.out.println("Your Host addr: " + InetAddress.getLocalHost().getHostAddress());
-//            Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
-//            while (n.hasMoreElements()) {
-//                NetworkInterface e = n.nextElement();
-//
-//                Enumeration<InetAddress> a = e.getInetAddresses();
-//                while (a.hasMoreElements()) {
-//                    InetAddress addr = a.nextElement();
-//                    System.out.println("  " + addr.getHostAddress());
-//                }
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,5 +39,26 @@ class Utilities {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    static ArrayList<String> listINets() {
+        try {
+            Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+            ArrayList<String> iNets = new ArrayList<String>();
+            while (n.hasMoreElements()) {
+                NetworkInterface e = n.nextElement();
+                Enumeration<InetAddress> a = e.getInetAddresses();
+                while (a.hasMoreElements()) {
+                    InetAddress addr = a.nextElement();
+                    iNets.add(addr.getHostAddress());
+//                    addr.getDisplayName(); TODO mirar si esto es útil.
+//                    addr.getName(); TODO mirar si esto es útil.
+//                    addr.toString(); TODO mirar si esto es útil.
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return iNets;
     }
 }
