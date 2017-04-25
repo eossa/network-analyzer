@@ -14,9 +14,12 @@ public class Application {
      * @param args The args send by CLI.
      */
     public static void main(String[] args) {
+        System.out.println("Arguments");
         for (String arg : args) {
             System.out.println(arg);
         }
-        System.out.println(Utilities.ping(args[1]));
+        System.out.println("\n\n");
+//        System.out.println(Utilities.ping(args[1]));
+        Utilities.listNetInterfaces("10.0.1.7");
     }
 }
