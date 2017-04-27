@@ -2,7 +2,9 @@ package app;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 
 /**
@@ -36,7 +38,7 @@ class Utilities {
      */
     static boolean ping(String destinationIp) {
         try {
-            return InetAddress.getByName(destinationIp).isReachable(1000);
+            return castIp(destinationIp).isReachable(1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,25 +48,22 @@ class Utilities {
     /**
      * Method for list the network interfaces.
      *
-     * @param ip The IP
-     *
      * @return A list with the networks interfaces.
      */
-    static ArrayList<String> listNetInterfaces(String ip) {
+    static ArrayList<String> listNetInterfaces() {
+        byte b = 126 + 1;
         ArrayList<String> netInterfaces = new ArrayList<>();
         try {
-            NetworkInterface netInterface = NetworkInterface.getByInetAddress(castIp(ip));
-            Enumeration<NetworkInterface> n = netInterface.getSubInterfaces();
-            while (n.hasMoreElements()) {
-                NetworkInterface e = n.nextElement();
-                Enumeration<InetAddress> a = e.getInetAddresses();
-                while (a.hasMoreElements()) {
-                    InetAddress addr = a.nextElement();
-                    netInterfaces.add(addr.getHostAddress());
-                    System.out.println(addr.getHostAddress());
-                    System.out.println(addr.getHostName());
-                    System.out.println("\n\n");
+            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
+            for (NetworkInterface netint : Collections.list(nets)) {
+                System.out.printf("Display name: %s\n", netint.getDisplayName());
+                System.out.printf("Name: %s\n", netint.getName());
+                Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+                for (InetAddress inetAddress : Collections.list(inetAddresses)) {
+                    System.out.printf("InetAddress: %s\n", inetAddress);
+                    netInterfaces.add(netint.getDisplayName()+" - "+inetAddress.toString());
                 }
+                System.out.printf("\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,9 +73,7 @@ class Utilities {
 
     static void experiment() {
         try {
-            System.out.println(InetAddress.getByName("10.0.1.6").isReachable(1000));
-//            for (InetAddress addr : InetAddress.getAllByName("10.0.1.7"))
-//                System.out.println(addr.toString());
+            NetworkInterface.getNetworkInterfaces();
         } catch (Exception e) {
             e.printStackTrace();
         }
