@@ -20,6 +20,6 @@ public class Application {
         }
         System.out.println("\n\n");
 //        System.out.println(Utilities.ping(args[1]));
-        Utilities.listNetInterfaces();
+        Utilities.listHosts();
     }
 }
