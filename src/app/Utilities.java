@@ -1,8 +1,6 @@
 package app;
 
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -81,7 +79,7 @@ class Utilities {
      * @return The host ip.
      * @author Elkin Fabian Ossa Zamudio
      */
-    static InetAddress getIp() {
+    private static InetAddress getIp() {
         InetAddress ip = InetAddress.getLoopbackAddress();
         try {
             ip = InetAddress.getLocalHost();
@@ -98,13 +96,39 @@ class Utilities {
      * @return True if can ping, false if not.
      * @author Elkin Fabian Ossa Zamudio
      */
-    static boolean ping(String destinationIp) {
+    private static boolean ping(String destinationIp) {
         try {
             return castIp(destinationIp).isReachable(1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * Method for list the opened ports of a given host IP.
+     *
+     * @param ip The host IP.
+     * @return The ports list of the given host IP.
+     * @author Elkin Fabian Ossa Zamudio
+     */
+    static List<Short> listPorts(String ip) {
+        List<Short> ports = new ArrayList<>();
+        for (short port = 0; port <= 1024; port++) {
+            try {
+                Socket echo = new Socket(ip, port);
+                System.out.println(port);
+                ports.add(port);
+                echo.close();
+            } catch (ConnectException ce) {
+                continue;
+            } catch (NoRouteToHostException nrthe) {
+                continue;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return ports;
     }
 
     /**
