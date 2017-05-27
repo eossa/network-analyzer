@@ -26,6 +26,17 @@ class Utilities {
             0xFFFFFC00, 0xFFFFFE00, 0xFFFFFF00, 0xFFFFFF80, 0xFFFFFFC0,
             0xFFFFFFE0, 0xFFFFFFF0, 0xFFFFFFF8, 0xFFFFFFFC, 0xFFFFFFFE,
             0xFFFFFFFF};
+    static final Integer FAST = 1;
+    static final Integer MEDIUM = 2;
+    static final Integer COMPLETE = 3;
+    static Integer type = FAST;
+
+    static final Integer TERMINAL = 4;
+    static final Integer GUI = 5;
+    static Integer mode = TERMINAL;
+
+    static final String HOSTS = "hosts";
+    static final String INTERFACES = "interfaces";
 
     /**
      * Method for list the hosts of the network.
@@ -33,8 +44,8 @@ class Utilities {
      * @return The hosts list.
      * @author Elkin Fabian Ossa Zamudio
      */
-    static List<String> listHosts() {
-        List<String> hostsList = new ArrayList<>();
+    static List<Host> listHosts() {
+        List<Host> hostsList = new ArrayList<>();
         try {
             InetAddress ip = getIp();
             NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ip);
@@ -54,17 +65,22 @@ class Utilities {
             double numHosts = Math.pow(2, 32 - mask);
 
             // Verify the conected hosts in the network.
-            for (short i = 1; i <= numHosts; i++) {
+            for (short i = 1; i <= 41; i++) {
                 String otherHost = longToIP(netIp + i);
 
                 // Ping to know if the host is connected.
                 boolean ping = ping(otherHost);
 
-                System.out.println(otherHost + " can ping? " + ping);
-
                 // If can ping, added to array.
                 if (ping) {
-                    hostsList.add(otherHost);
+                    if (isTerminal())
+                        System.out.println("Host found: " + otherHost);
+                    Host host = new Host(otherHost);
+
+                    if (mode.equals(COMPLETE))
+                        host.setPorts(listPorts(otherHost));
+
+                    hostsList.add(host);
                 }
             }
         } catch (Exception e) {
@@ -77,12 +93,24 @@ class Utilities {
      * Static method for get the host IP.
      *
      * @return The host ip.
-     * @author Elkin Fabian Ossa Zamudio
+     * @author <a href="https://stackoverflow.com/users/635098/roylaurie">roylaurie</a>
+     * @see <a href="https://stackoverflow.com/questions/8083479/java-getting-my-ip-address">Java getting my IP address</a>
      */
     private static InetAddress getIp() {
         InetAddress ip = InetAddress.getLoopbackAddress();
         try {
-            ip = InetAddress.getLocalHost();
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                // Filters out 127.0.0.1 and inactive interfaces
+                if (iface.isLoopback() || !iface.isUp())
+                    continue;
+
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    ip = addresses.nextElement();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,8 +145,11 @@ class Utilities {
         for (short port = 0; port <= 1024; port++) {
             try {
                 Socket echo = new Socket(ip, port);
-                System.out.println(port);
+
+                if (isTerminal())
+                    System.out.println("Port " + port + " enabled");
                 ports.add(port);
+
                 echo.close();
             } catch (ConnectException ce) {
                 continue;
@@ -143,14 +174,18 @@ class Utilities {
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
             for (NetworkInterface netint : Collections.list(nets)) {
-                System.out.printf("Display name: %s\n", netint.getDisplayName());
-                System.out.printf("Name: %s\n", netint.getName());
+                if (isTerminal()) {
+                    System.out.printf("Display name: %s\n", netint.getDisplayName());
+                    System.out.printf("Name: %s\n", netint.getName());
+                }
                 Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
                 for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-                    System.out.printf("InetAddress: %s\n", inetAddress);
+                    if (isTerminal())
+                        System.out.printf("InetAddress: %s\n", inetAddress);
                     netInterfaces.add(netint.getDisplayName() + " - " + inetAddress.toString());
                 }
-                System.out.printf("\n");
+                if (isTerminal())
+                    System.out.printf("\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,6 +246,10 @@ class Utilities {
         sb.append(String.valueOf(longIP & 0x000000FF));
 
         return sb.toString();
+    }
+
+    static boolean isTerminal() {
+        return mode.equals(TERMINAL);
     }
 
     static void experiment() {
