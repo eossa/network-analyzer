@@ -65,7 +65,7 @@ class Utilities {
             double numHosts = Math.pow(2, 32 - mask);
 
             // Verify the conected hosts in the network.
-            for (short i = 1; i <= 41; i++) {
+            for (short i = 1; i <= numHosts; i++) {
                 String otherHost = longToIP(netIp + i);
 
                 // Ping to know if the host is connected.
