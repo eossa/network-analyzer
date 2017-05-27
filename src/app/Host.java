@@ -1,7 +1,70 @@
 package app;
 
+import java.util.List;
+
 /**
- * Created by elkin on 27/05/17.
+ * Class that contains the Host's information.
+ *
+ * @author Elkin Fabian Ossa Zamudio
+ * @since 2015-05-27
  */
 public class Host {
+    /**
+     * The host IP address.
+     */
+    private String ip;
+    /**
+     * The list of the ports of the host.
+     */
+    private List<Short> ports;
+
+    /**
+     * Constructor for create an Host instance.
+     *
+     * @param ip The host Ip address.
+     */
+    public Host(String ip) {
+        this.ip = ip;
+    }
+
+    /**
+     * Method for get the IP address.
+     *
+     * @return The IP address of the Host.
+     */
+    public String getIp() {
+        return ip;
+    }
+
+    /**
+     * Method for set the IP address of the Host.
+     *
+     * @param ip The IP address of the Host.
+     */
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    /**
+     * Method for get ports' list of the Host.
+     *
+     * @return The ports' list of the Host.
+     */
+    public List<Short> getPorts() {
+        return ports;
+    }
+
+    /**
+     * Method for set the ports' list of the Host.
+     *
+     * @param ports The ports' list of the Host.
+     */
+    public void setPorts(List<Short> ports) {
+        this.ports = ports;
+    }
+
+    @Override
+    public String toString() {
+        return "Host{ ip='" + ip + "' }";
+    }
 }
