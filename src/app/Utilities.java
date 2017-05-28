@@ -77,6 +77,8 @@ class Utilities {
      * @author Elkin Fabian Ossa Zamudio
      */
     static List<Host> listHosts() {
+        if (isTerminal())
+            System.out.println("Listing the hosts in the network.");
         List<Host> hostsList = new ArrayList<>();
         try {
             InetAddress ip = getIp();
@@ -96,8 +98,8 @@ class Utilities {
             // The number of hosts in the network (2^n)
             double numHosts = Math.pow(2, 32 - mask);
 
-            // Verify the conected hosts in the network.
-            for (short i = 1; i <= numHosts; i++) {
+            // Verify the connected hosts in the network.
+            for (short i = 1; i <= 50; i++) {
                 String otherHost = longToIP(netIp + i);
 
                 // Ping to know if the host is connected.
@@ -176,6 +178,8 @@ class Utilities {
      * @author Elkin Fabian Ossa Zamudio
      */
     private static List<Short> listPorts(String ip) {
+        if (isTerminal())
+            System.out.println("Checking ports");
         List<Short> ports = new ArrayList<>();
         for (short port = 0; port <= 1024; port++) {
             try {
@@ -205,6 +209,8 @@ class Utilities {
      * @author Elkin Fabian Ossa Zamudio
      */
     private static List<String> listServices(String ip) {
+        if (isTerminal())
+            System.out.println("Checking services");
         FtpClient ftpClient;
         HttpClient httpClient;
         HttpClient httpsClient;
@@ -262,6 +268,8 @@ class Utilities {
      * @see <a href="https://docs.oracle.com/javase/tutorial/networking/nifs/listing.html">Listing Network Interface Addresses</a>
      */
     static ArrayList<String> listNetInterfaces() {
+        if (isTerminal())
+            System.out.println("Listing the network interfaces of the current host");
         ArrayList<String> netInterfaces = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
@@ -339,13 +347,5 @@ class Utilities {
 
     static boolean isTerminal() {
         return mode.equals(TERMINAL);
-    }
-
-    static void experiment() {
-        try {
-            String var = "";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
