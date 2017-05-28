@@ -17,6 +17,10 @@ public class Host {
      * The list of the ports of the host.
      */
     private List<Short> ports;
+    /**
+     * The list of the services of the host.
+     */
+    private List<String> services;
 
     /**
      * Constructor for create an Host instance.
@@ -61,6 +65,14 @@ public class Host {
      */
     public void setPorts(List<Short> ports) {
         this.ports = ports;
+    }
+
+    public List<String> getServices() {
+        return services;
+    }
+
+    public void setServices(List<String> services) {
+        this.services = services;
     }
 
     @Override
