@@ -78,7 +78,7 @@ class Utilities {
      */
     static List<Host> listHosts() {
         if (isTerminal())
-            System.out.println("Listing the hosts in the network.");
+            System.out.println("Listing the hosts in the network");
         List<Host> hostsList = new ArrayList<>();
         try {
             InetAddress ip = getIp();
