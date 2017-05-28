@@ -1,5 +1,7 @@
 package app;
 
+import sun.net.www.http.HttpClient;
+
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,8 +79,11 @@ class Utilities {
                         System.out.println("Host found: " + otherHost);
                     Host host = new Host(otherHost);
 
-                    if (mode.equals(COMPLETE))
+                    if (mode.equals(MEDIUM))
                         host.setPorts(listPorts(otherHost));
+
+                    if (mode.equals(COMPLETE))
+                        host.setServices(listServices(otherHost));
 
                     hostsList.add(host);
                 }
@@ -160,6 +165,12 @@ class Utilities {
             }
         }
         return ports;
+    }
+
+    static List<String> listServices(String ip) {
+        List<String> services = new ArrayList<>();
+        new HttpClient(new URL("http://" + ip));
+        return services;
     }
 
     /**
