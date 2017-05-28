@@ -111,10 +111,10 @@ class Utilities {
                         System.out.println("Host found: " + otherHost);
                     Host host = new Host(otherHost);
 
-                    if (mode.equals(MEDIUM))
+                    if (type.equals(MEDIUM))
                         host.setPorts(listPorts(otherHost));
 
-                    if (mode.equals(COMPLETE))
+                    if (type.equals(COMPLETE))
                         host.setServices(listServices(otherHost));
 
                     hostsList.add(host);
@@ -198,6 +198,8 @@ class Utilities {
                 e.printStackTrace();
             }
         }
+        if (ports.isEmpty())
+            System.out.println("Without ports opened");
         return ports;
     }
 
