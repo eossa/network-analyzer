@@ -1,5 +1,8 @@
 package app;
 
+import com.sun.jndi.dns.DnsClient;
+import sun.net.ftp.FtpClient;
+import sun.net.smtp.SmtpClient;
 import sun.net.www.http.HttpClient;
 
 import java.net.*;
@@ -168,8 +171,52 @@ class Utilities {
     }
 
     static List<String> listServices(String ip) {
+        FtpClient ftpClient;
+        HttpClient httpClient;
+        HttpClient httpsClient;
+        SmtpClient smtpClient;
+        DnsClient dnsClient;
+        Boolean available;
         List<String> services = new ArrayList<>();
-        new HttpClient(new URL("http://" + ip));
+        for (String service : new String[]{"FTP", "HTTP", "HTTPS", "SMTP", "DNS"}) {
+            available = false;
+            try {
+                switch (service) {
+                    case "FTP":
+                        ftpClient = FtpClient.create(ip);
+                        available = ftpClient.isConnected();
+                        ftpClient.close();
+                        break;
+                    case "HTTP":
+                        httpClient = HttpClient.New(new URL("http://" + ip));
+                        available = httpClient.serverIsOpen();
+                        httpClient.closeServer();
+                        break;
+                    case "HTTPS":
+                        httpsClient = HttpClient.New(new URL("https://" + ip));
+                        available = httpsClient.serverIsOpen();
+                        httpsClient.closeServer();
+                        break;
+                    case "SMTP":
+                        smtpClient = new SmtpClient(ip);
+                        available = smtpClient.serverIsOpen();
+                        smtpClient.closeServer();
+                        break;
+                    case "DNS":
+                        dnsClient = new DnsClient(new String[]{ip}, 1000, 5);
+                        available = true;
+                        dnsClient.close();
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (available) {
+                if (isTerminal())
+                    System.out.println("Service " + service + " available.");
+                services.add(service);
+            }
+        }
         return services;
     }
 
@@ -247,16 +294,13 @@ class Utilities {
      * @see <a href="http://facedroid.blogspot.com.co/2010/06/ip-range-to-cidr.html">IP Range To CIDR</a>
      */
     private static String longToIP(long longIP) {
-        StringBuffer sb = new StringBuffer("");
-        sb.append(String.valueOf(longIP >>> 24));
-        sb.append(".");
-        sb.append(String.valueOf((longIP & 0x00FFFFFF) >>> 16));
-        sb.append(".");
-        sb.append(String.valueOf((longIP & 0x0000FFFF) >>> 8));
-        sb.append(".");
-        sb.append(String.valueOf(longIP & 0x000000FF));
-
-        return sb.toString();
+        return String.valueOf(longIP >>> 24) +
+                "." +
+                String.valueOf((longIP & 0x00FFFFFF) >>> 16) +
+                "." +
+                String.valueOf((longIP & 0x0000FFFF) >>> 8) +
+                "." +
+                String.valueOf(longIP & 0x000000FF);
     }
 
     static boolean isTerminal() {
