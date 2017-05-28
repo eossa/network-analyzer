@@ -31,16 +31,43 @@ class Utilities {
             0xFFFFFC00, 0xFFFFFE00, 0xFFFFFF00, 0xFFFFFF80, 0xFFFFFFC0,
             0xFFFFFFE0, 0xFFFFFFF0, 0xFFFFFFF8, 0xFFFFFFFC, 0xFFFFFFFE,
             0xFFFFFFFF};
+    /**
+     * Constant for execution type.
+     */
     static final Integer FAST = 1;
+    /**
+     * Constant for execution type.
+     */
     static final Integer MEDIUM = 2;
+    /**
+     * Constant for execution type.
+     */
     static final Integer COMPLETE = 3;
+    /**
+     * Execution type constant.
+     */
     static Integer type = FAST;
 
+    /**
+     * Constant for execution mode.
+     */
     static final Integer TERMINAL = 4;
+    /**
+     * Constant for execution mode.
+     */
     static final Integer GUI = 5;
+    /**
+     * Execution mode constant.
+     */
     static Integer mode = TERMINAL;
 
+    /**
+     * Action constant for list hosts.
+     */
     static final String HOSTS = "hosts";
+    /**
+     * Action constant for list interfaces.
+     */
     static final String INTERFACES = "interfaces";
 
     /**
@@ -128,7 +155,7 @@ class Utilities {
     /**
      * Method for verify if can ping to an specified IP address.
      *
-     * @param destinationIp The destionation IP
+     * @param destinationIp The destination IP
      * @return True if can ping, false if not.
      * @author Elkin Fabian Ossa Zamudio
      */
@@ -145,10 +172,10 @@ class Utilities {
      * Method for list the opened ports of a given host IP.
      *
      * @param ip The host IP.
-     * @return The ports list of the given host IP.
+     * @return The opened ports list of the given host IP.
      * @author Elkin Fabian Ossa Zamudio
      */
-    static List<Short> listPorts(String ip) {
+    private static List<Short> listPorts(String ip) {
         List<Short> ports = new ArrayList<>();
         for (short port = 0; port <= 1024; port++) {
             try {
@@ -170,7 +197,14 @@ class Utilities {
         return ports;
     }
 
-    static List<String> listServices(String ip) {
+    /**
+     * Method for list the available services of a given host IP.
+     *
+     * @param ip The host IP.
+     * @return The available services list of the given host IP.
+     * @author Elkin Fabian Ossa Zamudio
+     */
+    private static List<String> listServices(String ip) {
         FtpClient ftpClient;
         HttpClient httpClient;
         HttpClient httpsClient;
