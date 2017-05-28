@@ -99,7 +99,7 @@ class Utilities {
             double numHosts = Math.pow(2, 32 - mask);
 
             // Verify the connected hosts in the network.
-            for (short i = 1; i <= 50; i++) {
+            for (short i = 1; i <= numHosts; i++) {
                 String otherHost = longToIP(netIp + i);
 
                 // Ping to know if the host is connected.
@@ -108,10 +108,10 @@ class Utilities {
                 // If can ping, added to array.
                 if (ping) {
                     if (isTerminal())
-                        System.out.println("Host found: " + otherHost);
+                        System.out.println("\nHost found: " + otherHost);
                     Host host = new Host(otherHost);
 
-                    if (type.equals(MEDIUM))
+                    if (type.equals(MEDIUM) || type.equals(COMPLETE))
                         host.setPorts(listPorts(otherHost));
 
                     if (type.equals(COMPLETE))
@@ -198,7 +198,7 @@ class Utilities {
                 e.printStackTrace();
             }
         }
-        if (ports.isEmpty())
+        if (ports.isEmpty() && isTerminal())
             System.out.println("Without ports opened");
         return ports;
     }
@@ -250,6 +250,10 @@ class Utilities {
                         dnsClient.close();
                         break;
                 }
+            } catch (ConnectException ce) {
+                continue;
+            } catch (UnknownHostException uhe) {
+                continue;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -259,6 +263,9 @@ class Utilities {
                 services.add(service);
             }
         }
+        if (services.isEmpty() && isTerminal())
+            System.out.println("Without services availables");
+
         return services;
     }
 
