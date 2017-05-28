@@ -178,9 +178,9 @@ class Utilities {
      * @author Elkin Fabian Ossa Zamudio
      */
     private static List<Short> listPorts(String ip) {
+        List<Short> ports = new ArrayList<>();
         if (isTerminal())
             System.out.println("Checking ports");
-        List<Short> ports = new ArrayList<>();
         for (short port = 0; port <= 1024; port++) {
             try {
                 Socket echo = new Socket(ip, port);
@@ -211,8 +211,6 @@ class Utilities {
      * @author Elkin Fabian Ossa Zamudio
      */
     private static List<String> listServices(String ip) {
-        if (isTerminal())
-            System.out.println("Checking services");
         FtpClient ftpClient;
         HttpClient httpClient;
         HttpClient httpsClient;
@@ -220,6 +218,8 @@ class Utilities {
         DnsClient dnsClient;
         Boolean available;
         List<String> services = new ArrayList<>();
+        if (isTerminal())
+            System.out.println("Checking services");
         for (String service : new String[]{"FTP", "HTTP", "HTTPS", "SMTP", "DNS"}) {
             available = false;
             try {
@@ -264,7 +264,7 @@ class Utilities {
             }
         }
         if (services.isEmpty() && isTerminal())
-            System.out.println("Without services availables");
+            System.out.println("Without services available");
 
         return services;
     }
@@ -277,9 +277,9 @@ class Utilities {
      * @see <a href="https://docs.oracle.com/javase/tutorial/networking/nifs/listing.html">Listing Network Interface Addresses</a>
      */
     static ArrayList<String> listNetInterfaces() {
+        ArrayList<String> netInterfaces = new ArrayList<>();
         if (isTerminal())
             System.out.println("Listing the network interfaces of the current host");
-        ArrayList<String> netInterfaces = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
             for (NetworkInterface netint : Collections.list(nets)) {
