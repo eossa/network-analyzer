@@ -279,11 +279,11 @@ public class Utilities {
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
             for (NetworkInterface netint : Collections.list(nets)) {
-                print("Display name: " + netint.getDisplayName() + "\n");
-                print("Name: " + netint.getName() + "\n");
+                print("Display name: " + netint.getDisplayName());
+                print("Name: " + netint.getName());
                 Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
                 for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-                    print("InetAddress: " + inetAddress + "\n");
+                    print("InetAddress: " + inetAddress);
                     netInterfaces.add(netint.getDisplayName() + " - " + inetAddress.toString());
                 }
                 print("\n");

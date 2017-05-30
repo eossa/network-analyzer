@@ -32,7 +32,9 @@ public class Application {
     static void initTerminal(String[] args) {
         String action = "";
         Utilities.mode = Utilities.TERMINAL;
-        System.out.println("Networks Analyzer");
+        System.out.println("+-------------------+");
+        System.out.println("| Networks Analyzer |");
+        System.out.println("+-------------------+\n");
         for (String arg : args) {
             if (arg.equalsIgnoreCase("-f"))
                 Utilities.type = Utilities.FAST;
