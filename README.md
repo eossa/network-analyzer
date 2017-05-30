@@ -1,4 +1,4 @@
-# Network Analizer
+# Network Analyzer
 Networks I final project
 
 ## TODO
