@@ -55,8 +55,8 @@ public class Application {
         }
 
         String help = "Help\n";
-        help += "\t" + Utilities.HOSTS + " [-f|-m|-c]\t\tList the hosts in the network.\n";
-        help += "\t" + Utilities.INTERFACES + "      \t\tList the current host network interfaces.";
+        help += "\t" + Utilities.HOSTS + " [-f|-m|-c]\tList the hosts in the network.\n";
+        help += "\t" + Utilities.INTERFACES + "      \tList the current host network interfaces.";
         if (action.isEmpty())
             System.out.println((System.getProperty("os.name").toLowerCase().contains("win") ? "" : "\u001B[31m") + "Unknown command\n\n" + help);
         else {
