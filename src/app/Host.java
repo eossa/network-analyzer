@@ -1,5 +1,6 @@
 package app;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,8 @@ public class Host {
      */
     public Host(String ip) {
         this.ip = ip;
+        this.ports = new ArrayList<>();
+        this.services = new ArrayList<>();
     }
 
     /**
