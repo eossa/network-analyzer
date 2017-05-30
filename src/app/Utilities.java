@@ -5,6 +5,7 @@ import sun.net.ftp.FtpClient;
 import sun.net.smtp.SmtpClient;
 import sun.net.www.http.HttpClient;
 
+import javax.swing.JTextArea;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import java.util.List;
  * @author Elkin Fabian Ossa Zamudio
  * @since 2017-04-20
  */
-class Utilities {
+public class Utilities {
     /**
      * Array for cast an CIDR mask to a long value.
      *
@@ -34,19 +35,19 @@ class Utilities {
     /**
      * Constant for execution type.
      */
-    static final Integer FAST = 1;
+    public static final Integer FAST = 1;
     /**
      * Constant for execution type.
      */
-    static final Integer MEDIUM = 2;
+    public static final Integer MEDIUM = 2;
     /**
      * Constant for execution type.
      */
-    static final Integer COMPLETE = 3;
+    public static final Integer COMPLETE = 3;
     /**
      * Execution type constant.
      */
-    static Integer type = FAST;
+    public static Integer type = FAST;
 
     /**
      * Constant for execution mode.
@@ -70,15 +71,16 @@ class Utilities {
      */
     static final String INTERFACES = "interfaces";
 
+    static JTextArea TXA_CONSOLE;
+
     /**
      * Method for list the hosts of the network.
      *
      * @return The hosts list.
      * @author Elkin Fabian Ossa Zamudio
      */
-    static List<Host> listHosts() {
-        if (isTerminal())
-            System.out.println("Listing the hosts in the network");
+    public static List<Host> listHosts() {
+        print("Listing the hosts in the network");
         List<Host> hostsList = new ArrayList<>();
         try {
             InetAddress ip = getIp();
@@ -107,8 +109,7 @@ class Utilities {
 
                 // If can ping, added to array.
                 if (ping) {
-                    if (isTerminal())
-                        System.out.println("\nHost found: " + otherHost);
+                    print("\nHost found: " + otherHost);
                     Host host = new Host(otherHost);
 
                     if (type.equals(MEDIUM) || type.equals(COMPLETE))
@@ -179,14 +180,12 @@ class Utilities {
      */
     private static List<Short> listPorts(String ip) {
         List<Short> ports = new ArrayList<>();
-        if (isTerminal())
-            System.out.println("Checking ports");
+        print("Checking ports");
         for (short port = 0; port <= 1024; port++) {
             try {
                 Socket echo = new Socket(ip, port);
 
-                if (isTerminal())
-                    System.out.println("Port " + port + " enabled");
+                print("Port " + port + " enabled");
                 ports.add(port);
 
                 echo.close();
@@ -198,8 +197,8 @@ class Utilities {
                 e.printStackTrace();
             }
         }
-        if (ports.isEmpty() && isTerminal())
-            System.out.println("Without ports opened");
+        if (ports.isEmpty())
+            print("Without ports opened");
         return ports;
     }
 
@@ -218,8 +217,7 @@ class Utilities {
         DnsClient dnsClient;
         Boolean available;
         List<String> services = new ArrayList<>();
-        if (isTerminal())
-            System.out.println("Checking services");
+        print("Checking services");
         for (String service : new String[]{"FTP", "HTTP", "HTTPS", "SMTP", "DNS"}) {
             available = false;
             try {
@@ -258,13 +256,12 @@ class Utilities {
                 e.printStackTrace();
             }
             if (available) {
-                if (isTerminal())
-                    System.out.println("Service " + service + " available.");
+                print("Service " + service + " available.");
                 services.add(service);
             }
         }
-        if (services.isEmpty() && isTerminal())
-            System.out.println("Without services available");
+        if (services.isEmpty())
+            print("Without services available");
 
         return services;
     }
@@ -276,25 +273,20 @@ class Utilities {
      * @author <a href="https://docs.oracle.com">docs.oracle.com</a>
      * @see <a href="https://docs.oracle.com/javase/tutorial/networking/nifs/listing.html">Listing Network Interface Addresses</a>
      */
-    static ArrayList<String> listNetInterfaces() {
+    public static ArrayList<String> listNetInterfaces() {
         ArrayList<String> netInterfaces = new ArrayList<>();
-        if (isTerminal())
-            System.out.println("Listing the network interfaces of the current host");
+        print("Listing the network interfaces of the current host");
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
             for (NetworkInterface netint : Collections.list(nets)) {
-                if (isTerminal()) {
-                    System.out.printf("Display name: %s\n", netint.getDisplayName());
-                    System.out.printf("Name: %s\n", netint.getName());
-                }
+                print("Display name: " + netint.getDisplayName() + "\n");
+                print("Name: " + netint.getName() + "\n");
                 Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
                 for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-                    if (isTerminal())
-                        System.out.printf("InetAddress: %s\n", inetAddress);
+                    print("InetAddress: " + inetAddress + "\n");
                     netInterfaces.add(netint.getDisplayName() + " - " + inetAddress.toString());
                 }
-                if (isTerminal())
-                    System.out.printf("\n");
+                print("\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -356,5 +348,16 @@ class Utilities {
 
     static boolean isTerminal() {
         return mode.equals(TERMINAL);
+    }
+
+    static boolean isGui() {
+        return mode.equals(GUI);
+    }
+
+    static void print(String line) {
+        if (isTerminal())
+            System.out.println(line);
+        else if (isGui())
+            TXA_CONSOLE.append(line+"\n");
     }
 }
