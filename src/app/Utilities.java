@@ -71,6 +71,9 @@ public class Utilities {
      */
     static final String INTERFACES = "interfaces";
 
+    /**
+     * Constant of the text area for write the results.
+     */
     static JTextArea TXA_CONSOLE;
 
     /**
@@ -346,14 +349,29 @@ public class Utilities {
                 String.valueOf(longIP & 0x000000FF);
     }
 
+    /**
+     * Method for verify if the execution is in terminal mode.
+     *
+     * @return True or false.
+     */
     static boolean isTerminal() {
         return mode.equals(TERMINAL);
     }
 
+    /**
+     * Method for verify if the execution is in Gui mode.
+     *
+     * @return True or false.
+     */
     static boolean isGui() {
         return mode.equals(GUI);
     }
 
+    /**
+     * Method for print a result in Gui or Terminal.
+     *
+     * @param line The value to print.
+     */
     static void print(String line) {
         if (isTerminal())
             System.out.println(line);

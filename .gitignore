@@ -25,3 +25,6 @@ hs_err_pid*
 
 .idea/
 network-analizer.iml
+
+#JavaDoc
+doc/
