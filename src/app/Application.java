@@ -46,15 +46,26 @@ public class Application {
                 action = Utilities.HOSTS;
             else if (arg.equalsIgnoreCase(Utilities.INTERFACES))
                 action = Utilities.INTERFACES;
+            else if (arg.equalsIgnoreCase("-h")
+                    || arg.equalsIgnoreCase("--h")
+                    || arg.equalsIgnoreCase("help")
+                    || arg.equalsIgnoreCase("-help")
+                    || arg.equalsIgnoreCase("--help"))
+                action = "help";
         }
 
-        if (action.isEmpty()) {
-            System.out.println("Bad command, you can write " + Utilities.HOSTS + " or " + Utilities.INTERFACES);
-        } else {
+        String help = "Help\n";
+        help += "\t" + Utilities.HOSTS + " [-f|-m|-c]\t\tList the hosts in the network.\n";
+        help += "\t" + Utilities.INTERFACES + "\t\t\t\tList the current host network interfaces.";
+        if (action.isEmpty())
+            System.out.println((System.getProperty("os.name").toLowerCase().contains("win") ? "" : "\u001B[31m") + "Unknown command\n\n" + help);
+        else {
             if (action.equals(Utilities.HOSTS))
                 Utilities.listHosts();
-            if (action.equals(Utilities.INTERFACES))
+            else if (action.equals(Utilities.INTERFACES))
                 Utilities.listNetInterfaces();
+            else if (action.equalsIgnoreCase("help"))
+                System.out.println(help);
         }
     }
 
